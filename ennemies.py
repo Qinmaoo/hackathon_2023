@@ -11,9 +11,9 @@ class Ennemy:
         self.life = life
         self.force = force
 
-    def draw_mob(self, screen):
+    def draw_mob(self, screen, width, height):
         color = generate_random_color()
-        x, y = random.randint(0, S_WIDTH), random.randint(0, S_HEIGHT)
+        x, y = random.randint(0, width), random.randint(0, height)
         pg.draw.circle(screen, color, (x, y), 10)
 
     def lose_life(self, hit):
