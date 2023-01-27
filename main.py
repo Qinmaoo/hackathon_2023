@@ -1,9 +1,7 @@
 import pygame as pg
 from items_stats import *
 from rooms import Room, Player
-import numpy as np
-from enemies import Enemy, gen_enemy
-from itertools import product
+from enemies import gen_enemy
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
@@ -24,13 +22,6 @@ def main():
 
     player = Player(100,100)
 
-    title_menu = pgm.Menu(
-        height=0.8 * S_HIGHT,
-        theme=pgm.themes.THEME_BLUE,
-        title="Dungeon Picher",
-        width=0.9 * S_WIDTH,
-    )
-
     run = True
     while run:
         clock.tick(50)
@@ -42,6 +33,7 @@ def main():
         joueur = pg.transform.rotozoom((pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2)
         screen.blit(joueur, (player.x, player.y))
 
+        room.interact_wall(player)
         room.swith_rooms(player, current_room)
         room.draw_room(screen)
 

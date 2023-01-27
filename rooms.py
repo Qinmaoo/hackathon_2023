@@ -38,6 +38,13 @@ class Room:
         for enemy in self.enemies:
             enemy.draw_mob(screen)
     
+    def interact_wall(self, player):
+        if (player.x < 15) or (player.x > S_WIDTH - 15):
+            player.x = 15
+        elif (player.y < 15) or (player.y > S_HEIGHT - 15):
+            player.y = 15
+
+    
     def swith_rooms(self, player, current_room):
         i,j = current_room
         if (player.x < D_h) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):                # going through left door
@@ -52,7 +59,7 @@ class Room:
             current_room = (i-1)%4, j
             player.y = S_HEIGHT - D_h
         
-        elif (S_WIDTH-D_w)/2 < player.x < (S_WIDTH+D_w)/2 and (player.y < D_h):                  # Through down door
+        elif (S_WIDTH-D_w)/2 < player.x < (S_WIDTH+D_w)/2 and (player.y > S_HEIGHT - D_h):                  # Through down door
             current_room = (i+1)%4, j
             player.y = D_h
         
