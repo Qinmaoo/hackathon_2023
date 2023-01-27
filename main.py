@@ -2,14 +2,8 @@ import pygame as pg
 import pygame_menu as pgm
 from items_stats import *
 from rooms import Room, Player
-<<<<<<< HEAD
 import numpy as np
 from enemies import gen_enemy, dist
-=======
-import rooms
-from enemies import gen_enemy
-import numpy as np
->>>>>>> 3ab9f75c0b632eaff2fef8c336e2590f847440b6
 from itertools import product
 
 S_WIDTH, S_HEIGHT = 800, 700
@@ -70,6 +64,11 @@ def main():
     title_menu.add.button("Start", disabling)
     title_menu.add.button("Quit", pgm.events.EXIT)
 
+    room = Room(gen_enemy(),(0,0))
+
+    is_attacking = False
+    cooldown = 0
+
     run = True
     while run:
         clock.tick(50)
@@ -90,7 +89,7 @@ def main():
             (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
         )
 
-        enemy_list = room_grid[rooms.current_room].enemies
+        enemy_list = room.enemies
 
         for enemy in enemy_list:
             if enemy.trap:
@@ -108,10 +107,8 @@ def main():
         if is_attacking:
             if cooldown == Stats["FIRE_RATE"]:
                 for enemy in enemy_list:
-                    pos_joueur = joueur.get_rect()
-                    pos_enemy = (enemy.sprite()).get_rect()
-                    if pos_joueur.colliderect(pos_enemy):
-                        pass
+                    pass
+
             cooldown -= 1
 
             if cooldown <= 0:
