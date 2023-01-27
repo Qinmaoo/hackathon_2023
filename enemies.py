@@ -5,7 +5,6 @@ from math import sqrt
 NB_MOB_MIN = 1
 NB_MOB_MAX = 7
 
-
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
@@ -13,6 +12,7 @@ def dist(point1, point2):
     x, y = point1
     a, b = point2
     return sqrt((x - a) ** 2 + (y - b) ** 2)
+
 
 class Enemy:
     def __init__(
