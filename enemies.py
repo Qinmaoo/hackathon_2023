@@ -16,15 +16,15 @@ def dist(point1, point2):
     return sqrt((x - a) ** 2 + (y - b) ** 2)
 
 
-def gen_ennemy():
+def gen_enemy():
     nb = random.randint(NB_MOB_MIN, NB_MOB_MAX)
     list_res = []
     for i in range(nb):
-        list_res.append(Ennemy(30, 2, 10))
+        list_res.append(Enemy(30, 2, 10))
     return list_res
 
 
-class Ennemy:
+class Enemy:
     def __init__(
         self,
         hp,
