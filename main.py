@@ -32,13 +32,15 @@ def main():
     title_menu = pgm.Menu(
         height=0.8 * S_HIGHT,
         theme=pgm.themes.THEME_BLUE,
-        title="Dungeon Picher",
+        title="Title screen",
         width=0.9 * S_WIDTH,
     )
 
     def disabling(menu=title_menu):
         menu.disable()
 
+    logo = pgm.baseimage.BaseImage("textures/logo.png")
+    title_menu.add.banner(logo, pgm.events.NONE)
     character_selection = title_menu.add.selector(
         "Character :",
         [
@@ -51,6 +53,9 @@ def main():
             ("Noah-Luc", "NL.png"),
             ("Noé", "noe.png"),
             ("Raphaelle", "raph.png"),
+            ("Thibault", "thibault.png"),
+            ("Tom", "tom.png"),
+            ("Yoan", "yoan.png"),
         ],
         onchange=change_character,
     )
@@ -65,7 +70,13 @@ def main():
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
         joueur = pg.transform.rotozoom(
-            (pg.image.load("textures/" + character_selection).convert_alpha()), 0, 0.2
+            (
+                pg.image.load(
+                    "textures/" + character_selection.get_value()[0][1]
+                ).convert_alpha()
+            ),
+            0,
+            0.2,
         )
         screen.blit(joueur, (player.x, player.y))
 
@@ -94,7 +105,7 @@ def main():
                 event.key == pg.K_q or event.key == pg.K_ESCAPE
             ):
                 run = False
-            if event.key == pg.K_c:
+            if event.type == pg.KEYDOWN and event.key == pg.K_c:
                 title_menu.enable()
                 title_menu.mainloop(screen)
                 title_menu.disable()
