@@ -2,6 +2,7 @@ import pygame as pg
 from items_stats import *
 from rooms import Room
 from ennemies import *
+import pygame_menu as pgm
 
 S_WIDTH, S_HIGHT = 800, 700
 # R_WIDTH, R_HIGHT = 300, 500
@@ -26,6 +27,18 @@ def main():
     screen = pg.display.set_mode((S_WIDTH, S_HIGHT))
 
     player = Player(100, 100)
+
+    title_menu = pgm.Menu(
+        height=0.8 * S_HIGHT,
+        theme=pgm.themes.THEME_BLUE,
+        title="Dungeon Picher",
+        width=0.9 * S_WIDTH,
+    )
+
+    def disabling(menu=title_menu):
+        menu.disable()
+
+    # character_selection = title_menu.add.selector("Character :", [()])
 
     run = True
     while run:
