@@ -33,8 +33,7 @@ class Enemy:
         return pg.transform.rotozoom((pg.image.load("textures/tom.png").convert_alpha()), 0, 0.2)
 
     def draw_mob(self, screen):
-        if self.trap:
-            screen.blit(self.sprite(), (self.x,self.y))
+        screen.blit(self.sprite(), (self.x,self.y))
 
     def lose_health(self, hit):
         if not self.trap:
@@ -64,6 +63,6 @@ def gen_enemy():
     nb = random.randint(NB_MOB_MIN, NB_MOB_MAX)
     list_res = []
     for i in range(nb):
-        std1 = Enemy(40,15,2)
+        std1 = Enemy(40,15,8)
         list_res.append(std1)
     return list_res

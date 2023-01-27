@@ -13,7 +13,7 @@ closed_texture = pg.transform.rotozoom(
 )
 
 
-Stats = {"HP_MAX": 100, "ATK": 10, "SPD": 15, "DEF": 0, "RANGE": 50, "FIRE_RATE": 100}
+Stats = {"HP_MAX": 100, "ATK": 10, "SPD": 25, "DEF": 0, "RANGE": 50, "FIRE_RATE": 100}
 HP = 100
 
 
