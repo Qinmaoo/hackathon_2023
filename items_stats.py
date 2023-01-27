@@ -3,15 +3,18 @@ import random
 
 S_WIDTH, S_HIGHT = 800, 700
 screen = pg.display.set_mode((S_WIDTH, S_HIGHT))
+
+
 opened_texture = pg.transform.rotozoom(
-    (pg.image.load("textures/opened_chest.png").convert_alpha()), 0, 0.1
+    (pg.image.load("textures/opened_chest.png").convert_alpha()), 0, 0.05
 )
 closed_texture = pg.transform.rotozoom(
-    (pg.image.load("textures/closed_chest.png").convert_alpha()), 0, 0.1
+    (pg.image.load("textures/closed_chest.png").convert_alpha()), 0, 0.05
 )
 
 
 Stats = {"HP_MAX": 100, "ATK": 10, "SPD": 15, "DEF": 0, "RANGE": 50, "FIRE_RATE": 100}
+HP = 100
 
 
 class Item:
@@ -24,7 +27,7 @@ class Item:
 
     def item_get(self):
         for st in Stats.keys():
-            st += self.effect[st]
+            Stats[st] += self.effect[st]
 
 
 brimstone = Item(
@@ -79,7 +82,11 @@ class Chest:
 
     def open(self):
         self.status = "opened"
-        self.texture = opened_texture
+        item_texture = self.content.texture
+        coffre_texture = opened_texture
+        merged = coffre_texture.copy()
+        merged.blit(pg.transform.rotozoom(item_texture, 0, 1), (15, 3))
+        self.texture = merged
 
 
 """ if event.key == pg.K_o:
