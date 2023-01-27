@@ -6,6 +6,7 @@ import rooms
 import numpy as np
 from enemies import gen_enemy, dist
 from itertools import product
+import rooms
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
@@ -16,8 +17,6 @@ room_grid = {}
 for i, j in product(range(4), range(4)):
     enem = gen_enemy()
     room_grid[(i, j)] = Room(enem, (i, j))
-
-coffre1 = Chest()
 
 
 def change_character(name="Alban", photo="alban.jpg"):
@@ -79,7 +78,7 @@ def main():
 
         # Entre affichage de deux images
         screen.fill((133, 80, 64))
-        screen.blit(coffre1.texture, (200, 200))
+        screen.blit(room_grid[rooms.current_room].chest.texture, (200, 200))
         joueur = pg.transform.rotozoom(
             (
                 pg.image.load(
@@ -93,8 +92,6 @@ def main():
             (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
         )
 
-        enemy_list = room.enemies
-
         text_atk = stat_font.render(f"ATK : {Stats['ATK']}", True, white)
         text_def = stat_font.render(f"DEF : {Stats['DEF']}", True, white)
         text_spd = stat_font.render(f"SPD : {Stats['SPD']}", True, white)
@@ -103,6 +100,8 @@ def main():
 
         room_grid[rooms.current_room].interact_wall(player)
         room_grid[rooms.current_room].switch_rooms(player)
+
+        enemy_list = room_grid[rooms.current_room].enemies
 
         screen.blit(text_atk, (20, 50))
         screen.blit(text_def, (20, 80))
@@ -126,7 +125,13 @@ def main():
         if is_attacking:
             if cooldown == Stats["FIRE_RATE"]:
                 for enemy in enemy_list:
-                    pass
+                    pos_attack = attack.get_rect()
+                    pos_enemy = (enemy.sprite()).get_rect()
+                    pos_enemy.x, pos_enemy.y = enemy.x, enemy.y
+                    if pos_attack.colliderect(pos_enemy):
+                        enemy.hp -= Stats["ATK"]
+                        if enemy.hp <= 0:
+                            enemy_list.pop(enemy)
 
             cooldown -= 1
 
@@ -141,7 +146,7 @@ def main():
         for enemy in enemy_list:
             screen.blit(enemy.sprite(), (enemy.x, enemy.y))
 
-        room.draw_room(screen)
+        room_grid[rooms.current_room].draw_room(screen)
 
         pg.display.update()
 
@@ -178,15 +183,15 @@ def main():
             player.x += Stats["SPD"] / 10
 
         if keys[pg.K_o]:
-            coffre1.open()
+            room_grid[rooms.current_room].chest.open()
 
         pos_joueur = joueur.get_rect()
         pos_joueur.x, pos_joueur.y = player.x, player.y
-        pos_coffre = coffre1.texture.get_rect()
+        pos_coffre = room_grid[rooms.current_room].chest.texture.get_rect()
         pos_coffre.x, pos_coffre.y = 200, 200
-        if pos_joueur.colliderect(pos_coffre) and coffre1.status == "closed":
-            coffre1.open()
-            coffre1.content.item_get()
+        if pos_joueur.colliderect(pos_coffre) and room_grid[rooms.current_room].chest.status == "closed":
+            room_grid[rooms.current_room].chest.open()
+            room_grid[rooms.current_room].chest.content.item_get()
 
     pg.quit()
 

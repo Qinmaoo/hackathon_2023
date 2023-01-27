@@ -1,5 +1,6 @@
 import pygame as pg
 from enemies import *
+from items_stats import *
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
@@ -29,6 +30,7 @@ class Room:
         self.enemies = enemies
         self.doors = Doors().doors
         self.id = room_id
+        self.chest = Chest(random.choice(item_list))
 
     def draw_room(self, screen):
         pg.draw.rect(screen, R_COLOR, self.display, width=15)
