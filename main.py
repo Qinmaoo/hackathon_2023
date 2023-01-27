@@ -2,6 +2,7 @@ import pygame as pg
 import pygame_menu as pgm
 from items_stats import *
 from rooms import Room, Player
+import rooms
 import numpy as np
 from enemies import gen_enemy, dist
 from itertools import product
@@ -12,9 +13,9 @@ D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
 
 room_grid = {}
-for i,j in product(range(4), range(4)):
+for i, j in product(range(4), range(4)):
     enem = gen_enemy()
-    room_grid[(i,j)] = Room(enem, (i,j))
+    room_grid[(i, j)] = Room(enem, (i, j))
 
 coffre1 = Chest()
 
@@ -67,7 +68,7 @@ def main():
     title_menu.add.button("Start", disabling)
     title_menu.add.button("Quit", pgm.events.EXIT)
 
-    room = Room(gen_enemy(),(0,0))
+    room = Room(gen_enemy(), (0, 0))
 
     is_attacking = False
     cooldown = 0
@@ -100,8 +101,6 @@ def main():
         text_range = stat_font.render(f"RNG : {Stats['RANGE']}", True, white)
         text_fire = stat_font.render(f"RTE : {Stats['FIRE_RATE']}", True, white)
 
-        
-        
         room_grid[rooms.current_room].interact_wall(player)
         room_grid[rooms.current_room].switch_rooms(player)
 
@@ -123,7 +122,7 @@ def main():
                     enemy.y -= enemy.spd / 10
                 elif player.y > enemy.y:
                     enemy.y += enemy.spd / 10
-        
+
         if is_attacking:
             if cooldown == Stats["FIRE_RATE"]:
                 for enemy in enemy_list:
@@ -137,7 +136,6 @@ def main():
 
             screen.blit(attack, (player.x - 25, player.y - 25))
 
-        
         screen.blit(joueur, (player.x, player.y))
 
         for enemy in enemy_list:
@@ -152,7 +150,9 @@ def main():
             if event.type == pg.QUIT:
                 run = False
 
-            if event.type == pg.KEYDOWN and (event.key == pg.K_q or event.key == pg.K_ESCAPE):
+            if event.type == pg.KEYDOWN and (
+                event.key == pg.K_q or event.key == pg.K_ESCAPE
+            ):
                 run = False
             if event.type == pg.KEYDOWN and event.key == pg.K_c:
                 title_menu.enable()
