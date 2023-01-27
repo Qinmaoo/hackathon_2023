@@ -17,8 +17,6 @@ for i,j in product(range(4), range(4)):
     enem = gen_enemy()
     room_grid[(i,j)] = Room(enem, (i,j))
 
-coffre1 = Chest()
-
 
 def change_character(name="Alban", photo="alban.jpg"):
     return photo
@@ -79,7 +77,7 @@ def main():
 
         # Entre affichage de deux images
         screen.fill((133, 80, 64))
-        screen.blit(coffre1.texture, (200, 200))
+        screen.blit(room_grid[rooms.current_room].chest.texture, (200, 200))
         joueur = pg.transform.rotozoom(
             (
                 pg.image.load(
@@ -179,15 +177,15 @@ def main():
             player.x += Stats["SPD"] / 10
 
         if keys[pg.K_o]:
-            coffre1.open()
+            room_grid[rooms.current_room].chest.open()
 
         pos_joueur = joueur.get_rect()
         pos_joueur.x, pos_joueur.y = player.x, player.y
-        pos_coffre = coffre1.texture.get_rect()
+        pos_coffre = room_grid[rooms.current_room].chest.texture.get_rect()
         pos_coffre.x, pos_coffre.y = 200, 200
-        if pos_joueur.colliderect(pos_coffre) and coffre1.status == "closed":
-            coffre1.open()
-            coffre1.content.item_get()
+        if pos_joueur.colliderect(pos_coffre) and room_grid[rooms.current_room].chest.status == "closed":
+            room_grid[rooms.current_room].chest.open()
+            room_grid[rooms.current_room].chest.content.item_get()
 
     pg.quit()
 

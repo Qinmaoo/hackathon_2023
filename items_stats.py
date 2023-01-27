@@ -74,7 +74,7 @@ item_list = [brimstone, magicmush, ipecac, plan_c, c_section, bobby, maggy, lilb
 
 class Chest:
     def __init__(
-        self, item=random.choice(item_list), status="closed", texture=closed_texture
+        self, item, status="closed", texture=closed_texture
     ):
         self.content = item
         self.status = status  # Ouvert/fermé
