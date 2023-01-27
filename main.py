@@ -24,6 +24,13 @@ def main():
 
     player = Player(100,100)
 
+    title_menu = pgm.Menu(
+        height=0.8 * S_HIGHT,
+        theme=pgm.themes.THEME_BLUE,
+        title="Dungeon Picher",
+        width=0.9 * S_WIDTH,
+    )
+
     run = True
     while run:
         clock.tick(50)
