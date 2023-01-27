@@ -3,7 +3,7 @@ from ennemies import *
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
-D_w, D_h = 50, 10
+D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
 
 
@@ -25,7 +25,7 @@ class Room:
         self.id = room_id
 
     def draw_room(self, screen):
-        pg.draw.rect(screen, R_COLOR, self.display, width=5)
+        pg.draw.rect(screen, R_COLOR, self.display, width=15)
 
         for door in self.doors:
             pg.draw.rect(screen, D_COLOR, door, width=D_h // 2)
