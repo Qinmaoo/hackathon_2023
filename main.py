@@ -29,6 +29,9 @@ def main():
 
     player = Player(100, 100)
 
+    white = (255, 255, 255)
+    stat_font = pg.font.SysFont("Helvetica", 15)
+
     title_menu = pgm.Menu(
         height=0.8 * S_HIGHT,
         theme=pgm.themes.THEME_BLUE,
@@ -82,6 +85,18 @@ def main():
 
         enemy_list = room.enemies
 
+        text_atk = stat_font.render(f"ATK : {Stats['ATK']}", True, white)
+        text_def = stat_font.render(f"DEF : {Stats['DEF']}", True, white)
+        text_spd = stat_font.render(f"SPD : {Stats['SPD']}", True, white)
+        text_range = stat_font.render(f"RNG : {Stats['RANGE']}", True, white)
+        text_fire = stat_font.render(f"RTE : {Stats['FIRE_RATE']}", True, white)
+
+        screen.blit(text_atk, (50, 200))
+        screen.blit(text_def, (50, 230))
+        screen.blit(text_spd, (50, 260))
+        screen.blit(text_range, (50, 290))
+        screen.blit(text_fire, (50, 320))
+
         for enemy in enemy_list:
             if enemy.trap:
                 pass
@@ -131,7 +146,7 @@ def main():
         pos_joueur.x, pos_joueur.y = player.x, player.y
         pos_coffre = coffre1.texture.get_rect()
         pos_coffre.x, pos_coffre.y = 200, 200
-        if pos_joueur.colliderect(pos_coffre):
+        if pos_joueur.colliderect(pos_coffre) and coffre1.status == "closed":
             coffre1.open()
             coffre1.content.item_get()
 
