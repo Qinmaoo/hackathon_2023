@@ -1,5 +1,5 @@
 import pygame as pg
-from ennemies import *
+from enemies import *
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
@@ -7,7 +7,6 @@ D_w, D_h = 50, 10
 D_COLOR = [196, 102, 65]
 
 class Player():
-
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -37,7 +36,7 @@ class Room:
             pg.draw.rect(screen, D_COLOR, door, width=D_h // 2)
 
         for enemy in self.enemies:
-            enemy.draw_mob(screen, S_WIDTH, S_HEIGHT)
+            enemy.draw_mob(screen)
     
     def swith_rooms(self, player, current_room):
         i,j = current_room

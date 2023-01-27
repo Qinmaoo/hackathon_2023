@@ -2,8 +2,8 @@ import pygame as pg
 from items_stats import *
 from rooms import Room, Player
 import numpy as np
-from ennemies import gen_enemy
-import collections as col
+from enemies import gen_enemy
+from itertools import product
 
 S_WIDTH, S_HIGHT = 800, 700
 # R_WIDTH, R_HIGHT = 300, 500
@@ -12,7 +12,7 @@ D_w, D_h = 50, 10
 D_COLOR = [196, 102, 65]
 current_room = (0,0)
 
-room_grid = np.array([Room(gen_enemy(), (i,j)) for i,j in col.product(range(4), range(4))]).resize((4,4))
+room = Room(gen_enemy(),current_room)
 
 coffre1 = Chest()
 
@@ -32,24 +32,33 @@ def main():
 
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
-        Room.swith_rooms(player)
         joueur = pg.transform.rotozoom(
             (pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2
         )
         screen.blit(joueur, (player.x, player.y))
 
-        mob1 = Ennemy(50, 2, 10)
-        room1 = room_grid[*current_room([mob1], 1)
-        room1].draw_room(screen)
+        enemy_list = room.enemies
 
+        for enemy in enemy_list:
+            if enemy.trap:
+                pass
+            else:
+                if player.x < enemy.x:
+                    enemy.x -= enemy.spd/10
+                elif player.x > enemy.x:
+                    enemy.x += enemy.spd/10
+                if player.y < enemy.y:
+                    enemy.y -= enemy.spd/10
+                elif player.y > enemy.y:
+                    enemy.y += enemy.spd/10
+        
+        room.draw_room(screen)
         pg.display.update()
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
-            if event.type == pg.KEYDOWN and (
-                event.key == pg.K_q or event.key == pg.K_ESCAPE
-            ):
+            if event.type == pg.KEYDOWN and (event.key == pg.K_q or event.key == pg.K_ESCAPE):
                 run = False
 
         keys = pg.key.get_pressed()
