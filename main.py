@@ -5,6 +5,7 @@ from rooms import Room, Player
 import numpy as np
 from enemies import gen_enemy, dist
 from itertools import product
+import rooms
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
@@ -127,7 +128,13 @@ def main():
         if is_attacking:
             if cooldown == Stats["FIRE_RATE"]:
                 for enemy in enemy_list:
-                    pass
+                    pos_attack = attack.get_rect()
+                    pos_enemy = (enemy.sprite()).get_rect()
+                    pos_enemy.x, pos_enemy.y = enemy.x, enemy.y
+                    if pos_attack.colliderect(pos_enemy):
+                        enemy.hp -= Stats["ATK"]
+                        if enemy.hp <= 0:
+                            enemy_list.pop(enemy)
 
             cooldown -= 1
 
