@@ -33,7 +33,6 @@ class Enemy:
         return pg.transform.rotozoom((pg.image.load("textures/leo.png").convert_alpha()), 0, 0.2)
 
     def draw_mob(self, screen):
-        if self.trap:
             screen.blit(self.sprite(), (self.x,self.y))
 
     def lose_health(self, hit):
