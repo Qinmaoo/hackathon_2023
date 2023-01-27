@@ -13,7 +13,7 @@ class Ennemy:
 
     def draw_mob(self, screen, width, height):
         color = generate_random_color()
-        x, y = random.randint(0, width), random.randint(0, height)
+        x, y = random.randint(10, width-10), random.randint(10, height-10)
         pg.draw.circle(screen, color, (x, y), 10)
 
     def lose_life(self, hit):
