@@ -5,7 +5,7 @@ opened_texture = pg.transform.rotozoom((pg.image.load("textures/opened_chest.png
 closed_texture = pg.transform.rotozoom((pg.image.load("textures/closed_chest.png").convert_alpha()), 0, 0.1)
 
 
-Stats = {"HP_MAX": 100, "ATK": 10, "SPD": 15, "DEF": 0, "RANGE": 50, "FIRE_RATE":100}
+Stats = {"HP_MAX": 100, "ATK": 10, "SPD": 15, "DEF": 0, "RANGE": 50, "FIRE_RATE": 100}
 
 class Item:
 
