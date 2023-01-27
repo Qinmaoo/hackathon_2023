@@ -50,7 +50,7 @@ class Room:
             player.y = S_HEIGHT - 60
 
     
-    def swith_rooms(self, player):
+    def switch_rooms(self, player):
         global current_room
         i,j = current_room
         if (player.x < D_h) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):                       # through left door
