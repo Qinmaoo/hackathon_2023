@@ -1,5 +1,5 @@
 import pygame as pg
-import ennemies as en
+
 
 S_WIDTH, S_HIGHT = 800, 700
 # R_WIDTH, R_HIGHT = 300, 500
@@ -47,8 +47,8 @@ def main():
 
         screen.fill((0, 0, 0))
         create_room()
-
         pg.draw.circle(screen, (0, 0, 255), (x, y), 10)
+
         pg.display.update()
 
         for event in pg.event.get():
