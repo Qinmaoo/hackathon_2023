@@ -1,15 +1,20 @@
 import pygame as pg
 from items_stats import *
 from rooms import Room, Player
+import rooms
 from enemies import gen_enemy
+import numpy as np
+from itertools import product
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
 D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
-current_room = (0,0)
 
-room = Room(gen_enemy(), (0,0))
+room_grid = {}
+for i,j in product(range(4), range(4)):
+    enem = gen_enemy()
+    room_grid[(i,j)] = Room(enem, (i,j))
 
 coffre1 = Chest()
 
@@ -33,9 +38,9 @@ def main():
         joueur = pg.transform.rotozoom((pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2)
         screen.blit(joueur, (player.x, player.y))
 
-        room.interact_wall(player)
-        room.swith_rooms(player, current_room)
-        room.draw_room(screen)
+        room_grid[rooms.current_room].interact_wall(player)
+        room_grid[rooms.current_room].swith_rooms(player)
+        room_grid[rooms.current_room].draw_room(screen)
 
         pg.display.update()
 

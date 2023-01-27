@@ -5,6 +5,7 @@ S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
 D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
+current_room = (0,0)
 
 class Player():
     def __init__(self, x, y):
@@ -49,11 +50,12 @@ class Room:
             player.y = S_HEIGHT - 60
 
     
-    def swith_rooms(self, player, current_room):
+    def swith_rooms(self, player):
+        global current_room
         i,j = current_room
         if (player.x < D_h) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):                       # through left door
             current_room = i, (j-1)%4
-            player.x = S_WIDTH - D_h - 45
+            player.x = S_WIDTH - D_h - 45 
         
         elif (player.x > S_WIDTH-D_h - 45) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):        # Through right door
             current_room = i, (j+1)%4

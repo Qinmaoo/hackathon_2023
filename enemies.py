@@ -25,21 +25,19 @@ def gen_enemy():
 
 
 class Enemy:
-    def __init__(
-        self,
-        hp,
-        atk,
-        spd,
-        x=random.normalvariate(800 / 2, 800 / 4),
-        y=random.normalvariate(700 / 2, 700 / 4),
-        trap=False,
-    ):
+    def __init__(self, hp, atk, spd, x=None, y=None, trap=False):
         self.hp = hp
         self.atk = atk
         self.spd = spd
         self.trap = trap
-        self.x = x
-        self.y = y
+        if x is None:
+            self.x = random.normalvariate(800 / 2, 800 / 4)
+        else:
+            self.x = x
+        if y is None:
+            self.y = random.normalvariate(700 / 2, 700 / 4)
+        else:
+            self.y = y
 
     def draw_mob(self, screen):
         if self.trap:
