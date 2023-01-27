@@ -83,6 +83,11 @@ def main():
         )
         screen.blit(joueur, (player.x, player.y))
 
+        
+        
+        room_grid[rooms.current_room].interact_wall(player)
+        room_grid[rooms.current_room].switch_rooms(player)
+
         enemy_list = room_grid[rooms.current_room].enemies
 
         for enemy in enemy_list:
@@ -98,8 +103,6 @@ def main():
                 elif player.y > enemy.y:
                     enemy.y += enemy.spd / 10
         
-        room_grid[rooms.current_room].interact_wall(player)
-        room_grid[rooms.current_room].switch_rooms(player)
         room_grid[rooms.current_room].draw_room(screen)
         pg.display.update()
 
