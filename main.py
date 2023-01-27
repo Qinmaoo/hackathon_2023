@@ -1,4 +1,5 @@
 import pygame as pg
+from items_stats import *
 
 S_WIDTH, S_HIGHT = 800, 700
 # R_WIDTH, R_HIGHT = 300, 500
@@ -17,7 +18,7 @@ class Room(pg.Rect):
     def __init__(self, l, t, w, h):
         super().__init__(l, t, w, h)
 
-
+coffre1 = Chest()
 def main():
     clock = pg.time.Clock()
 
@@ -33,19 +34,14 @@ def main():
 
     player = Player(100,100)
 
-    #Stats
-    HP = 100
-    
-    Stats = {"HP_MAX" : 100, "ATK" : 10, "DEF" : 0, "SPD" : 15, "RANGE" : 50, "FIRE_RATE" : 100}
-
     run = True
     while run:
         clock.tick(50)
-
         create_room()
         # code à mettre ici pour ce qu'il se passe entre 2 images
         
-        screen.fill((0,0,0))
+        screen.fill((133, 80, 64))
+        screen.blit(coffre1.texture,(200,200))
         pg.draw.circle(screen, (200,0,200), (player.x,player.y), 10)
         pg.display.update()
 
@@ -68,6 +64,9 @@ def main():
         
         if keys[pg.K_RIGHT]:
             player.x += Stats["SPD"]/10
+
+        if keys[pg.K_o]:
+            coffre1.open()
 
     pg.quit()
 
