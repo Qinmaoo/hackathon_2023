@@ -34,8 +34,12 @@ def main():
 
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
-        pg.draw.circle(screen, (200, 0, 200), (player.x, player.y), 10)
-        mob1 = Ennemy(50, 2)
+        joueur = pg.transform.rotozoom(
+            (pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2
+        )
+        screen.blit(joueur, (player.x, player.y))
+
+        mob1 = Ennemy(50, 2, 10)
         room1 = Room([mob1], 1)
         room1.draw_room(screen)
 
@@ -65,6 +69,14 @@ def main():
 
         if keys[pg.K_o]:
             coffre1.open()
+
+        pos_joueur = joueur.get_rect()
+        pos_joueur.x, pos_joueur.y = player.x, player.y
+        pos_coffre = coffre1.texture.get_rect()
+        pos_coffre.x, pos_coffre.y = 200, 200
+        if pos_joueur.colliderect(pos_coffre):
+            coffre1.open()
+            coffre1.content.item_get()
 
     pg.quit()
 
