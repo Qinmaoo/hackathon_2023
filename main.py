@@ -91,11 +91,11 @@ def main():
         text_range = stat_font.render(f"RNG : {Stats['RANGE']}", True, white)
         text_fire = stat_font.render(f"RTE : {Stats['FIRE_RATE']}", True, white)
 
-        screen.blit(text_atk, (50, 200))
-        screen.blit(text_def, (50, 230))
-        screen.blit(text_spd, (50, 260))
-        screen.blit(text_range, (50, 290))
-        screen.blit(text_fire, (50, 320))
+        screen.blit(text_atk, (20, 50))
+        screen.blit(text_def, (20, 80))
+        screen.blit(text_spd, (20, 110))
+        screen.blit(text_range, (20, 140))
+        screen.blit(text_fire, (20, 170))
 
         for enemy in enemy_list:
             if enemy.trap:
