@@ -30,7 +30,7 @@ class Enemy:
             self.y = y
 
     def sprite(self):
-        return pg.transform.rotozoom((pg.image.load("textures/tom.png").convert_alpha()), 0, 0.2)
+        return pg.transform.rotozoom((pg.image.load("textures/leo.png").convert_alpha()), 0, 0.2)
 
     def draw_mob(self, screen):
         screen.blit(self.sprite(), (self.x,self.y))
