@@ -2,19 +2,31 @@ import pygame as pg
 import pygame_menu as pgm
 from items_stats import *
 from rooms import Room, Player
+<<<<<<< HEAD
 import numpy as np
 from enemies import gen_enemy, dist
+=======
+import rooms
+from enemies import gen_enemy
+import numpy as np
+>>>>>>> 3ab9f75c0b632eaff2fef8c336e2590f847440b6
 from itertools import product
 
 S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
 D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
-current_room = (0,0)
 
-room = Room(gen_enemy(),current_room)
+room_grid = {}
+for i,j in product(range(4), range(4)):
+    enem = gen_enemy()
+    room_grid[(i,j)] = Room(enem, (i,j))
 
 coffre1 = Chest()
+
+
+def change_character(name="Alban", photo="alban.jpg"):
+    return photo
 
 
 def main():
@@ -23,16 +35,40 @@ def main():
     pg.init()
     screen = pg.display.set_mode((S_WIDTH, S_HEIGHT))
 
-    player = Player(100,100)
+    player = Player(100, 100)
 
     title_menu = pgm.Menu(
         height=0.8 * S_HIGHT,
         theme=pgm.themes.THEME_BLUE,
-        title="Dungeon Picher",
+        title="Title screen",
         width=0.9 * S_WIDTH,
     )
 
-    is_attacking , cooldown = False , 0
+    def disabling(menu=title_menu):
+        menu.disable()
+
+    logo = pgm.baseimage.BaseImage("textures/logo.png")
+    title_menu.add.banner(logo, pgm.events.NONE)
+    character_selection = title_menu.add.selector(
+        "Character :",
+        [
+            ("Alban", "alban.png"),
+            ("El Tuno", "alexis.png"),
+            ("Aymeric", "aymeric.png"),
+            ("Laure", "laure.png"),
+            ("Matéo", "mateo.png"),
+            ("Mattéo", "matteo.png"),
+            ("Noah-Luc", "NL.png"),
+            ("Noé", "noe.png"),
+            ("Raphaelle", "raph.png"),
+            ("Thibault", "thibault.png"),
+            ("Tom", "tom.png"),
+            ("Yoan", "yoan.png"),
+        ],
+        onchange=change_character,
+    )
+    title_menu.add.button("Start", disabling)
+    title_menu.add.button("Quit", pgm.events.EXIT)
 
     run = True
     while run:
@@ -42,13 +78,19 @@ def main():
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
         joueur = pg.transform.rotozoom(
-            (pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2
+            (
+                pg.image.load(
+                    "textures/" + character_selection.get_value()[0][1]
+                ).convert_alpha()
+            ),
+            0,
+            0.2,
         )
         attack = pg.transform.rotozoom(
             (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
         )
 
-        enemy_list = room.enemies
+        enemy_list = room_grid[rooms.current_room].enemies
 
         for enemy in enemy_list:
             if enemy.trap:
@@ -95,6 +137,10 @@ def main():
 
             if event.type == pg.KEYDOWN and (event.key == pg.K_q or event.key == pg.K_ESCAPE):
                 run = False
+            if event.type == pg.KEYDOWN and event.key == pg.K_c:
+                title_menu.enable()
+                title_menu.mainloop(screen)
+                title_menu.disable()
 
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and cooldown == 0:
                 is_attacking = True

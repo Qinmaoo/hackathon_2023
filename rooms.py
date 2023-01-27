@@ -5,6 +5,7 @@ S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
 D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
+current_room = (0,0)
 
 class Player():
     def __init__(self, x, y):
@@ -38,21 +39,33 @@ class Room:
         for enemy in self.enemies:
             enemy.draw_mob(screen)
     
-    def swith_rooms(self, player, current_room):
+    def interact_wall(self, player):
+        if player.x < 15:
+            player.x = 15
+        elif player.x + 45 > S_WIDTH - 15:
+            player.x = S_WIDTH - 60
+        elif player.y < 15:
+            player.y = 15
+        elif player.y > S_HEIGHT - 60:
+            player.y = S_HEIGHT - 60
+
+    
+    def switch_rooms(self, player):
+        global current_room
         i,j = current_room
-        if (player.x < D_h) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):                # going through left door
+        if (player.x < D_h) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):                       # through left door
             current_room = i, (j-1)%4
-            player.x = S_WIDTH - D_h
+            player.x = S_WIDTH - D_h - 45 
         
-        elif (player.x > S_WIDTH-D_h) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):      # Through right door
+        elif (player.x > S_WIDTH-D_h - 45) and ((S_HEIGHT-D_w)/2 < player.y < (S_HEIGHT+D_w)/2):        # Through right door
             current_room = i, (j+1)%4
             player.x = D_h
         
-        elif (S_WIDTH-D_w)/2 < player.x < (S_WIDTH+D_w)/2 and (player.y < D_h):                  # Through up door
+        elif (S_WIDTH-D_w)/2 < player.x < (S_WIDTH+D_w)/2 and (player.y < D_h):                         # Through up door
             current_room = (i-1)%4, j
-            player.y = S_HEIGHT - D_h
+            player.y = S_HEIGHT - D_h - 60
         
-        elif (S_WIDTH-D_w)/2 < player.x < (S_WIDTH+D_w)/2 and (player.y < D_h):                  # Through down door
+        elif (S_WIDTH-D_w)/2 < player.x < (S_WIDTH+D_w)/2 and (player.y + 60 > S_HEIGHT - D_h):              # Through down door
             current_room = (i+1)%4, j
             player.y = D_h
         
