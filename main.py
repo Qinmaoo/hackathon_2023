@@ -1,20 +1,18 @@
 import pygame as pg
-from items_stats import *
-from rooms import *
-from ennemies import *
 import pygame_menu as pgm
+from items_stats import *
+from rooms import Room, Player
 import numpy as np
+from enemies import gen_enemy
+from itertools import product
 
-S_WIDTH, S_HIGHT = 800, 700
-# R_WIDTH, R_HIGHT = 300, 500
+S_WIDTH, S_HEIGHT = 800, 700
 R_COLOR = [122, 52, 24]
 D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
 current_room = (0, 0)
 
-# room_grid = np.array(
-#    [Room(gen_ennemy(), (i, j)) for i, j in col.product(range(4), range(4))]
-# ).resize((4, 4))
+room = Room(gen_enemy(), current_room)
 
 coffre1 = Chest()
 
@@ -27,7 +25,7 @@ def main():
     clock = pg.time.Clock()
 
     pg.init()
-    screen = pg.display.set_mode((S_WIDTH, S_HIGHT))
+    screen = pg.display.set_mode((S_WIDTH, S_HEIGHT))
 
     player = Player(100, 100)
 
@@ -66,16 +64,27 @@ def main():
 
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
-        Room.swith_rooms(player)
         joueur = pg.transform.rotozoom(
             (pg.image.load("textures/" + character_selection).convert_alpha()), 0, 0.2
         )
         screen.blit(joueur, (player.x, player.y))
 
-        mob1 = Ennemy(50, 2, 10)
-        # room1 = room_grid[*current_room([mob1], 1)
-        # room1].draw_room(screen)
+        enemy_list = room.enemies
 
+        for enemy in enemy_list:
+            if enemy.trap:
+                pass
+            else:
+                if player.x < enemy.x:
+                    enemy.x -= enemy.spd / 10
+                elif player.x > enemy.x:
+                    enemy.x += enemy.spd / 10
+                if player.y < enemy.y:
+                    enemy.y -= enemy.spd / 10
+                elif player.y > enemy.y:
+                    enemy.y += enemy.spd / 10
+
+        room.draw_room(screen)
         pg.display.update()
 
         for event in pg.event.get():
