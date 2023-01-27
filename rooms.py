@@ -6,6 +6,12 @@ D_w, D_h = 50, 10
 D_COLOR = [196, 102, 65]
 screen = pg.display.set_mode((S_WIDTH, S_HEIGHT))
 
+class Player():
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 class Doors():
     
     def __init__(self):
@@ -32,6 +38,22 @@ class Room():
         for enemy in self.enemies:
             enemy.draw_mob(screen, S_WIDTH, S_HEIGHT)
     
-    def swith_rooms(self):
-        if (player.x <= D_h) and ((S_HEIGHT-D_w)/2 <= player.y <= (S_HEIGHT+D_w)/2):
-            None
+    def swith_rooms(self, player, current_room):
+        i,j = current_room
+        if (player.x <= D_h) and ((S_HEIGHT-D_w)/2 <= player.y <= (S_HEIGHT+D_w)/2):                # going through left door
+            current_room = i, (j-1)%4
+            player.x = S_WIDTH - player.x
+        
+        elif (player.x >= S_WIDTH-D_h) and ((S_HEIGHT-D_w)/2 <= player.y <= (S_HEIGHT+D_w)/2):      # Through right door
+            current_room = i, (j+1)%4
+            player.x = S_WIDTH - player.x
+        
+        elif (S_WIDTH-D_w)/2 <= player.x <= (S_WIDTH+D_w)/2 and (player.y <= D_h):                  # Through up door
+            current_room = (i-1)%4, j
+            player.y = S_HEIGHT - player.y
+        
+        elif (S_WIDTH-D_w)/2 <= player.x <= (S_WIDTH+D_w)/2 and (player.y <= D_h):                  # Through down door
+            current_room = (i+1)%4, j
+            player.y = S_HEIGHT - player.y 
+        
+    
