@@ -9,13 +9,9 @@ S_WIDTH, S_HIGHT = 800, 700
 R_COLOR = [122, 52, 24]
 D_w, D_h = 50, 30
 D_COLOR = [196, 102, 65]
+current_room = (0,0)
 
-
-class Player:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
+room_grid = np.array([Room(gen_enemy(), (i,j)) for i,j in col.product(range(4), range(4))]).resize((4,4))
 
 coffre1 = Chest()
 
@@ -26,7 +22,7 @@ def main():
     pg.init()
     screen = pg.display.set_mode((S_WIDTH, S_HIGHT))
 
-    player = Player(100, 100)
+    player = Player(100,100)
 
     title_menu = pgm.Menu(
         height=0.8 * S_HIGHT,
@@ -42,14 +38,15 @@ def main():
 
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
+        Room.swith_rooms(player)
         joueur = pg.transform.rotozoom(
             (pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2
         )
         screen.blit(joueur, (player.x, player.y))
 
         mob1 = Ennemy(50, 2, 10)
-        room1 = Room([mob1], 1)
-        room1.draw_room(screen)
+        room1 = room_grid[*current_room([mob1], 1)
+        room1].draw_room(screen)
 
         pg.display.update()
 
