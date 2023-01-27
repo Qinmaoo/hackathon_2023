@@ -29,9 +29,17 @@ def main():
     x, y = 100, 100
     delta = 10
 
+    # Stats
     HP = 100
-    ATK = 10
-    DEF = 0
+
+    Stats = {
+        "HP_MAX": 100,
+        "ATK": 10,
+        "DEF": 0,
+        "SPD": 15,
+        "RANGE": 50,
+        "FIRE_RATE": 100,
+    }
 
     run = True
     while run:
@@ -46,22 +54,25 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
+            if event.type == pg.KEYDOWN and (
+                event.key == pg.K_q or event.key == pg.K_ESCAPE
+            ):
+                run = False
 
-            elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_q or event.key == pg.K_ESCAPE:
-                    run = False
+        keys = pg.key.get_pressed()
 
-                if event.key == pg.K_DOWN:
-                    y += delta
+        if keys[pg.K_DOWN]:
+            y += Stats["SPD"] / 10
 
-                if event.key == pg.K_UP:
-                    y -= delta
+        if keys[pg.K_UP]:
+            y -= Stats["SPD"] / 10
 
-                if event.key == pg.K_LEFT:
-                    x -= delta
+        if keys[pg.K_LEFT]:
+            x -= Stats["SPD"] / 10
 
-                if event.key == pg.K_RIGHT:
-                    x += delta
+        if keys[pg.K_RIGHT]:
+            x += Stats["SPD"] / 10
+
     pg.quit()
 
 
