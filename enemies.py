@@ -64,5 +64,6 @@ def gen_enemy():
     nb = random.randint(NB_MOB_MIN, NB_MOB_MAX)
     list_res = []
     for i in range(nb):
+        std1 = Enemy(40,15,2)
         list_res.append(std1)
     return list_res

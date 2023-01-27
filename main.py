@@ -2,6 +2,7 @@ import pygame as pg
 import pygame_menu as pgm
 from items_stats import *
 from rooms import Room, Player
+import rooms
 import numpy as np
 from enemies import gen_enemy, dist
 from itertools import product
@@ -92,8 +93,6 @@ def main():
             (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
         )
 
-        enemy_list = room.enemies
-
         text_atk = stat_font.render(f"ATK : {Stats['ATK']}", True, white)
         text_def = stat_font.render(f"DEF : {Stats['DEF']}", True, white)
         text_spd = stat_font.render(f"SPD : {Stats['SPD']}", True, white)
@@ -104,6 +103,8 @@ def main():
         
         room_grid[rooms.current_room].interact_wall(player)
         room_grid[rooms.current_room].switch_rooms(player)
+
+        enemy_list = room_grid[rooms.current_room].enemies
 
         screen.blit(text_atk, (20, 50))
         screen.blit(text_def, (20, 80))
@@ -143,7 +144,7 @@ def main():
         for enemy in enemy_list:
             screen.blit(enemy.sprite(), (enemy.x, enemy.y))
 
-        room.draw_room(screen)
+        room_grid[rooms.current_room].draw_room(screen)
 
         pg.display.update()
 
