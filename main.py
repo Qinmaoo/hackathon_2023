@@ -31,6 +31,18 @@ def main():
         width=0.9 * S_WIDTH,
     )
 
+    title_menu = pgm.Menu(
+        height=0.8 * S_HIGHT,
+        theme=pgm.themes.THEME_BLUE,
+        title="Dungeon Picher",
+        width=0.9 * S_WIDTH,
+    )
+
+    def disabling(menu=title_menu):
+        menu.disable()
+
+    # character_selection = title_menu.add.selector("Character :", [()])
+
     run = True
     while run:
         clock.tick(50)
