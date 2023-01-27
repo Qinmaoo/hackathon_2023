@@ -3,7 +3,7 @@ import pygame_menu as pgm
 from items_stats import *
 from rooms import Room, Player
 import numpy as np
-from enemies import gen_enemy
+from enemies import gen_enemy, dist
 from itertools import product
 
 S_WIDTH, S_HEIGHT = 800, 700
@@ -32,17 +32,21 @@ def main():
         width=0.9 * S_WIDTH,
     )
 
+    is_attacking , cooldown = False , 0
+
     run = True
     while run:
         clock.tick(50)
-        # code à mettre ici pour ce qu'il se passe entre 2 images
 
+        # Entre affichage de deux images
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
         joueur = pg.transform.rotozoom(
             (pg.image.load("textures/thibault.png").convert_alpha()), 0, 0.2
         )
-        screen.blit(joueur, (player.x, player.y))
+        attack = pg.transform.rotozoom(
+            (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
+        )
 
         enemy_list = room.enemies
 
@@ -51,22 +55,50 @@ def main():
                 pass
             else:
                 if player.x < enemy.x:
-                    enemy.x -= enemy.spd/10
+                    enemy.x -= enemy.spd / 10
                 elif player.x > enemy.x:
-                    enemy.x += enemy.spd/10
+                    enemy.x += enemy.spd / 10
                 if player.y < enemy.y:
-                    enemy.y -= enemy.spd/10
+                    enemy.y -= enemy.spd / 10
                 elif player.y > enemy.y:
-                    enemy.y += enemy.spd/10
+                    enemy.y += enemy.spd / 10
         
+        if is_attacking:
+            if cooldown == Stats["FIRE_RATE"]:
+                for enemy in enemy_list:
+                    pos_joueur = joueur.get_rect()
+                    pos_enemy = (enemy.sprite()).get_rect()
+                    if pos_joueur.colliderect(pos_enemy):
+                        pass
+            cooldown -= 1
+
+            if cooldown <= 0:
+                is_attacking = False
+                cooldown = 0
+
+            screen.blit(attack, (player.x - 25, player.y - 25))
+
+        
+        screen.blit(joueur, (player.x, player.y))
+
+        for enemy in enemy_list:
+            screen.blit(enemy.sprite(), (enemy.x, enemy.y))
+
         room.draw_room(screen)
+
         pg.display.update()
 
         for event in pg.event.get():
+
             if event.type == pg.QUIT:
                 run = False
+
             if event.type == pg.KEYDOWN and (event.key == pg.K_q or event.key == pg.K_ESCAPE):
                 run = False
+
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and cooldown == 0:
+                is_attacking = True
+                cooldown = Stats["FIRE_RATE"]
 
         keys = pg.key.get_pressed()
 

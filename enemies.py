@@ -31,12 +31,12 @@ class Enemy:
         self.x = x
         self.y = y
 
+    def sprite(self):
+        return pg.transform.rotozoom((pg.image.load("textures/tom.png").convert_alpha()), 0, 0.2)
+
     def draw_mob(self, screen):
         if self.trap:
-            color = (128, 128, 128)
-        else:
-            color = (255, 0, 0)
-        pg.draw.circle(screen, color, (self.x, self.y), 20)
+            screen.blit(self.sprite(), (self.x,self.y))
 
     def lose_health(self, hit):
         if not self.trap:
@@ -44,18 +44,18 @@ class Enemy:
 
 #Enemy types
 std1 = Enemy(40,15,2)
-std2 = Enemy(60,20,3)
-std3 = Enemy(80,25,4)
+std2 = Enemy(60,20,2.5)
+std3 = Enemy(80,25,3)
 
-off1 = Enemy(20,30,4)
-off2 = Enemy(30,35,5)
-off3 = Enemy(40,40,6)
+off1 = Enemy(20,30,3)
+off2 = Enemy(30,35,3.5)
+off3 = Enemy(40,40,4)
 
-def1 = Enemy(60,10,1)
-def2 = Enemy(100,10,1)
-def3 = Enemy(140,10,2)
+def1 = Enemy(60,10,1.5)
+def2 = Enemy(100,10,2)
+def3 = Enemy(140,10,2.5)
 
-boss = Enemy(200,30,3)
+boss = Enemy(200,30,2)
 
 trap1 = Enemy(1,20,30, trap = True)
 trap2 = Enemy(1,30,40, trap = True)
