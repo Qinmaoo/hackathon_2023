@@ -2,9 +2,8 @@ import pygame as pg
 import pygame_menu as pgm
 from items_stats import *
 from rooms import Room, Player
-import rooms
-from enemies import gen_enemy
 import numpy as np
+from enemies import gen_enemy, dist
 from itertools import product
 
 S_WIDTH, S_HEIGHT = 800, 700
@@ -31,6 +30,9 @@ def main():
     screen = pg.display.set_mode((S_WIDTH, S_HEIGHT))
 
     player = Player(100, 100)
+
+    white = (255, 255, 255)
+    stat_font = pg.font.SysFont("Helvetica", 15)
 
     title_menu = pgm.Menu(
         height=0.8 * S_HIGHT,
@@ -65,11 +67,16 @@ def main():
     title_menu.add.button("Start", disabling)
     title_menu.add.button("Quit", pgm.events.EXIT)
 
+    room = Room(gen_enemy(),(0,0))
+
+    is_attacking = False
+    cooldown = 0
+
     run = True
     while run:
         clock.tick(50)
-        # code à mettre ici pour ce qu'il se passe entre 2 images
 
+        # Entre affichage de deux images
         screen.fill((133, 80, 64))
         screen.blit(coffre1.texture, (200, 200))
         joueur = pg.transform.rotozoom(
@@ -81,14 +88,28 @@ def main():
             0,
             0.2,
         )
-        screen.blit(joueur, (player.x, player.y))
+        attack = pg.transform.rotozoom(
+            (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
+        )
+
+        enemy_list = room.enemies
+
+        text_atk = stat_font.render(f"ATK : {Stats['ATK']}", True, white)
+        text_def = stat_font.render(f"DEF : {Stats['DEF']}", True, white)
+        text_spd = stat_font.render(f"SPD : {Stats['SPD']}", True, white)
+        text_range = stat_font.render(f"RNG : {Stats['RANGE']}", True, white)
+        text_fire = stat_font.render(f"RTE : {Stats['FIRE_RATE']}", True, white)
 
         
         
         room_grid[rooms.current_room].interact_wall(player)
         room_grid[rooms.current_room].switch_rooms(player)
 
-        enemy_list = room_grid[rooms.current_room].enemies
+        screen.blit(text_atk, (20, 50))
+        screen.blit(text_def, (20, 80))
+        screen.blit(text_spd, (20, 110))
+        screen.blit(text_range, (20, 140))
+        screen.blit(text_fire, (20, 170))
 
         for enemy in enemy_list:
             if enemy.trap:
@@ -103,20 +124,44 @@ def main():
                 elif player.y > enemy.y:
                     enemy.y += enemy.spd / 10
         
-        room_grid[rooms.current_room].draw_room(screen)
+        if is_attacking:
+            if cooldown == Stats["FIRE_RATE"]:
+                for enemy in enemy_list:
+                    pass
+
+            cooldown -= 1
+
+            if cooldown <= 0:
+                is_attacking = False
+                cooldown = 0
+
+            screen.blit(attack, (player.x - 25, player.y - 25))
+
+        
+        screen.blit(joueur, (player.x, player.y))
+
+        for enemy in enemy_list:
+            screen.blit(enemy.sprite(), (enemy.x, enemy.y))
+
+        room.draw_room(screen)
+
         pg.display.update()
 
         for event in pg.event.get():
+
             if event.type == pg.QUIT:
                 run = False
-            if event.type == pg.KEYDOWN and (
-                event.key == pg.K_q or event.key == pg.K_ESCAPE
-            ):
+
+            if event.type == pg.KEYDOWN and (event.key == pg.K_q or event.key == pg.K_ESCAPE):
                 run = False
             if event.type == pg.KEYDOWN and event.key == pg.K_c:
                 title_menu.enable()
                 title_menu.mainloop(screen)
                 title_menu.disable()
+
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and cooldown == 0:
+                is_attacking = True
+                cooldown = Stats["FIRE_RATE"]
 
         keys = pg.key.get_pressed()
 
@@ -139,7 +184,7 @@ def main():
         pos_joueur.x, pos_joueur.y = player.x, player.y
         pos_coffre = coffre1.texture.get_rect()
         pos_coffre.x, pos_coffre.y = 200, 200
-        if pos_joueur.colliderect(pos_coffre):
+        if pos_joueur.colliderect(pos_coffre) and coffre1.status == "closed":
             coffre1.open()
             coffre1.content.item_get()
 
