@@ -34,9 +34,11 @@ def main():
     white = (255, 255, 255)
     stat_font = pg.font.SysFont("Helvetica", 15)
 
+    theme = pgm.themes.THEME_BLUE.copy()
+
     title_menu = pgm.Menu(
         height=0.8 * S_HIGHT,
-        theme=pgm.themes.THEME_BLUE,
+        theme=theme,
         title="Title screen",
         width=0.9 * S_WIDTH,
     )
@@ -47,12 +49,13 @@ def main():
     logo = pgm.baseimage.BaseImage("textures/logo.png")
     title_menu.add.banner(logo, pgm.events.NONE)
     character_selection = title_menu.add.selector(
-        "Character :",
+        "Character : ",
         [
             ("Alban", "alban.png"),
             ("El Tuno", "alexis.png"),
             ("Aymeric", "aymeric.png"),
             ("Laure", "laure.png"),
+            ("Léo", "leo.png"),
             ("Matéo", "mateo.png"),
             ("Mattéo", "matteo.png"),
             ("Noah-Luc", "NL.png"),
@@ -89,25 +92,50 @@ def main():
             0.2,
         )
         attack = pg.transform.rotozoom(
-            (pg.image.load("textures/attack.png").convert_alpha()), 0, 0.2
+            (pg.image.load("textures/attack.png").convert_alpha()),
+            0,
+            0.2,
         )
 
-        text_atk = stat_font.render(f"ATK : {Stats['ATK']}", True, white)
-        text_def = stat_font.render(f"DEF : {Stats['DEF']}", True, white)
-        text_spd = stat_font.render(f"SPD : {Stats['SPD']}", True, white)
-        text_range = stat_font.render(f"RNG : {Stats['RANGE']}", True, white)
-        text_fire = stat_font.render(f"RTE : {Stats['FIRE_RATE']}", True, white)
+        im_atk = pg.transform.rotozoom(
+            (pg.image.load("textures/DMG.png").convert_alpha()), 0, 0.04
+        )
+        im_def = pg.transform.rotozoom(
+            (pg.image.load("textures/DEF.png").convert_alpha()), 0, 0.04
+        )
+        im_spd = atk = pg.transform.rotozoom(
+            (pg.image.load("textures/SPD.png").convert_alpha()), 0, 0.04
+        )
+        im_rng = atk = pg.transform.rotozoom(
+            (pg.image.load("textures/RANGE.png").convert_alpha()), 0, 0.04
+        )
+        im_rate = pg.transform.rotozoom(
+            (pg.image.load("textures/FIRE_RATE.png").convert_alpha()), 0, 0.04
+        )
+
+        text_atk = stat_font.render(f"{Stats['ATK']}", True, white)
+        text_def = stat_font.render(f"{Stats['DEF']}", True, white)
+        text_spd = stat_font.render(f"{Stats['SPD']}", True, white)
+        text_range = stat_font.render(f"{Stats['RANGE']}", True, white)
+        text_fire = stat_font.render(f"{Stats['FIRE_RATE']}", True, white)
 
         room_grid[rooms.current_room].interact_wall(player)
         room_grid[rooms.current_room].switch_rooms(player)
 
         enemy_list = room_grid[rooms.current_room].enemies
 
-        screen.blit(text_atk, (20, 50))
-        screen.blit(text_def, (20, 80))
-        screen.blit(text_spd, (20, 110))
-        screen.blit(text_range, (20, 140))
-        screen.blit(text_fire, (20, 170))
+        pg.draw.rect(screen, (150, 150, 150), pg.Rect(15, 40, 70, 150))
+
+        screen.blit(text_atk, (50, 50))
+        screen.blit(text_def, (50, 80))
+        screen.blit(text_spd, (50, 110))
+        screen.blit(text_range, (50, 140))
+        screen.blit(text_fire, (50, 170))
+        screen.blit(im_atk, (20, 45))
+        screen.blit(im_def, (20, 75))
+        screen.blit(im_spd, (20, 105))
+        screen.blit(im_rng, (20, 135))
+        screen.blit(im_rate, (20, 165))
 
         for enemy in enemy_list:
             if enemy.trap:
@@ -189,7 +217,10 @@ def main():
         pos_joueur.x, pos_joueur.y = player.x, player.y
         pos_coffre = room_grid[rooms.current_room].chest.texture.get_rect()
         pos_coffre.x, pos_coffre.y = 200, 200
-        if pos_joueur.colliderect(pos_coffre) and room_grid[rooms.current_room].chest.status == "closed":
+        if (
+            pos_joueur.colliderect(pos_coffre)
+            and room_grid[rooms.current_room].chest.status == "closed"
+        ):
             room_grid[rooms.current_room].chest.open()
             room_grid[rooms.current_room].chest.content.item_get()
 
